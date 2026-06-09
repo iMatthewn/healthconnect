@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
+  <title>HealthConnect Perú | Telemedicina Inteligente</title>
+  
+  <!-- Font Awesome para iconos médicos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --azul-medico: #0b3d5f;
+      --verde-salud: #2a9d8f;
+      --purpura-tech: #5f4b8b;
+      --gris-fondo: #f0f4f8;
+      --blanco: #ffffff;
+      --sombra-tarjeta: 0 20px 35px rgba(0, 20, 30, 0.15);
+      --borde-redondeado: 2rem;
+      --transicion-general: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1);
+    }
+
+    body {
+      font-family: 'Segoe UI', 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(145deg, #d4e7f5 0%, #b8d9ec 40%, #c5e0d5 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.2rem;
+      margin: 0;
+      animation: entradaSuave 0.6s ease-out;
+    }
+
+    @keyframes entradaSuave {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    .tarjeta-health {
+      max-width: 580px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: var(--borde-redondeado);
+      box-shadow: var(--sombra-tarjeta), 0 0 0 1px rgba(42, 157, 143, 0.2);
+      padding: 1.8rem 1.5rem 2rem;
+      transition: var(--transicion-general);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .area-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--azul-medico);
+      letter-spacing: -0.5px;
+    }
+
+    .icono-logo {
+      background: linear-gradient(135deg, var(--verde-salud), var(--purpura-tech));
+      color: white;
+      border-radius: 50%;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      box-shadow: 0 8px 18px rgba(42, 157, 143, 0.4);
+      animation: pulsoSuave 2.2s infinite;
+    }
+
+    @keyframes pulsoSuave {
+      0% { transform: scale(1); box-shadow: 0 8px 18px rgba(42, 157, 143, 0.3); }
+      50% { transform: scale(1.06); box-shadow: 0 12px 24px rgba(94, 75, 139, 0.45); }
+      100% { transform: scale(1); box-shadow: 0 8px 18px rgba(42, 157, 143, 0.3); }
+    }
+
+    .selector-roles {
+      display: flex;
+      background: #e9f0f5;
+      border-radius: 3rem;
+      padding: 0.3rem;
+      gap: 0.3rem;
+      margin: 0.2rem 0 0.5rem;
+    }
+
+    .boton-rol {
+      flex: 1;
+      background: transparent;
+      border: none;
+      padding: 0.8rem 0.5rem;
+      border-radius: 2.5rem;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+      cursor: pointer;
+      transition: var(--transicion-general);
+      color: #2c3e50;
+      background: transparent;
+    }
+
+    .boton-rol.activo {
+      background: white;
+      box-shadow: 0 6px 14px rgba(0,0,0,0.08);
+      color: var(--azul-medico);
+      font-weight: 700;
+      transform: scale(1.02);
+    }
+
+    .boton-rol i {
+      font-size: 1.1rem;
+    }
+
+    .contenedor-vista {
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .contenedor-vista.transicion-desvanecer {
+      opacity: 0;
+      transform: translateY(12px);
+    }
+
+    .caja-autenticacion {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .grupo-entrada {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .etiqueta {
+      font-weight: 600;
+      color: #1e4a5f;
+      font-size: 0.9rem;
+      margin-left: 0.3rem;
+    }
+
+    .campo-texto, .area-texto {
+      padding: 0.9rem 1rem;
+      border: 1px solid #dce7f0;
+      border-radius: 1.5rem;
+      font-size: 0.95rem;
+      background: #f9fcff;
+      transition: var(--transicion-general);
+      outline: none;
+    }
+
+    .campo-texto:focus, .area-texto:focus {
+      border-color: var(--verde-salud);
+      box-shadow: 0 0 0 3px rgba(42,157,143,0.2);
+    }
+
+    .boton-principal {
+      background: var(--azul-medico);
+      border: none;
+      color: white;
+      font-weight: 600;
+      padding: 0.9rem;
+      border-radius: 2rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: var(--transicion-general);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      background: linear-gradient(135deg, #0b3d5f, #1b5a82);
+      box-shadow: 0 8px 18px rgba(11,61,95,0.25);
+    }
+
+    .boton-principal:hover {
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #134b6e, #226b94);
+    }
+
+    .boton-secundario {
+      background: transparent;
+      border: 1.5px solid var(--azul-medico);
+      color: var(--azul-medico);
+      box-shadow: none;
+      background: white;
+    }
+
+    .boton-secundario:hover {
+      background: #f0f7fe;
+    }
+
+    .boton-pequeno {
+      padding: 0.5rem 1.2rem;
+      font-size: 0.85rem;
+    }
+
+    .ventana-chat {
+      background: #f6fafd;
+      border-radius: 1.5rem;
+      padding: 1rem;
+      height: 400px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      scroll-behavior: smooth;
+      box-shadow: inset 0 2px 10px rgba(0,0,0,0.02);
+      border: 1px solid #e0ebf5;
+    }
+
+    .mensaje {
+      max-width: 85%;
+      padding: 0.8rem 1rem;
+      border-radius: 1.3rem;
+      font-size: 0.9rem;
+      line-height: 1.4;
+      word-break: break-word;
+    }
+
+    .mensaje-bot {
+      background: white;
+      align-self: flex-start;
+      border-bottom-left-radius: 0.3rem;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.04);
+      color: #1e293b;
+    }
+
+    .mensaje-usuario {
+      background: linear-gradient(135deg, #dcfce8, #c8f0dd);
+      align-self: flex-end;
+      border-bottom-right-radius: 0.3rem;
+      font-weight: 500;
+      color: #0b3d2e;
+    }
+
+    .indicador-escribiendo {
+      display: flex;
+      gap: 0.3rem;
+      padding: 0.5rem 1rem;
+      background: white;
+      border-radius: 1.3rem;
+      align-self: flex-start;
+      margin-top: 0.2rem;
+    }
+
+    .punto-animado {
+      width: 8px;
+      height: 8px;
+      background: #94a3b8;
+      border-radius: 50%;
+      animation: rebotePuntos 1.2s infinite ease-in-out;
+    }
+
+    .punto-animado:nth-child(2) { animation-delay: 0.2s; }
+    .punto-animado:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes rebotePuntos {
+      0%, 60%, 100% { transform: translateY(0); }
+      30% { transform: translateY(-9px); }
+    }
+
+    .area-entrada-chat {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .area-entrada-chat .campo-texto {
+      flex: 1;
+    }
+
+    .lista-pacientes {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .tarjeta-paciente {
+      background: #f4f9ff;
+      border-radius: 1.2rem;
+      padding: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border: 1px solid #d9e9fa;
+      transition: var(--transicion-general);
+      cursor: pointer;
+    }
+
+    .tarjeta-paciente:hover {
+      background: #e3f1ff;
+      transform: scale(1.01);
+      box-shadow: 0 6px 14px rgba(0,0,0,0.05);
+    }
+
+    .resumen-clinico {
+      background: #fff9f0;
+      border-radius: 1rem;
+      padding: 0.9rem;
+      margin: 0.5rem 0;
+      font-size: 0.85rem;
+      border-left: 4px solid var(--verde-salud);
+    }
+
+    .menu-opciones {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      margin: 0.5rem 0;
+    }
+
+    .boton-opcion {
+      background: white;
+      border: 2px solid #e0e8f0;
+      padding: 1rem;
+      border-radius: 1.2rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transicion-general);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      text-align: left;
+      color: #1e3a5f;
+    }
+
+    .boton-opcion:hover {
+      background: #f0f7ff;
+      border-color: var(--verde-salud);
+      transform: translateX(5px);
+      box-shadow: 0 4px 12px rgba(42,157,143,0.15);
+    }
+
+    .boton-opcion .numero-opcion {
+      background: var(--verde-salud);
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .boton-opcion .icono-opcion {
+      font-size: 1.3rem;
+      width: 30px;
+      text-align: center;
+    }
+
+    .boton-volver-menu {
+      background: transparent;
+      border: 1px dashed var(--verde-salud);
+      color: var(--verde-salud);
+      padding: 0.7rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      cursor: pointer;
+      margin-top: 0.5rem;
+      transition: var(--transicion-general);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .boton-volver-menu:hover {
+      background: #e8f5f3;
+      border-style: solid;
+    }
+
+    /* Estilo para el iframe de Chatbase */
+    .contenedor-chatbase {
+      width: 100%;
+      height: 450px;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      border: 2px solid var(--verde-salud);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .contenedor-chatbase iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    hr {
+      border: 0.5px solid #d0e0ef;
+      margin: 0.5rem 0;
+    }
+  </style>
+</head>
+<body>
+<div class="tarjeta-health" id="tarjetaPrincipal">
+  <div class="area-logo">
+    <div class="icono-logo"><i class="fas fa-heartbeat"></i></div>
+    <span>HealthConnect Perú</span>
+  </div>
+
+  <div class="selector-roles" id="selectorRoles">
+    <button class="boton-rol activo" data-rol="paciente"><i class="fas fa-user"></i> PACIENTE</button>
+    <button class="boton-rol" data-rol="doctor"><i class="fas fa-user-md"></i> DOCTOR</button>
+  </div>
+
+  <div id="vistaDinamica" class="contenedor-vista"></div>
+</div>
+
+<script>
+  (function() {
+    // ========== CONFIGURACIÓN DE CHATBASE ==========
+    // Reemplaza 'TU_CHATBOT_ID' con el ID de tu chatbot de Chatbase
+    const CONFIG_CHATBASE = {
+      chatbotId: 'TU_CHATBOT_ID_AQUI', // ← Cambiar por tu ID real
+      dominio: 'https://www.chatbase.co',
+      embedUrl: 'https://www.chatbase.co/chatbot-iframe/'
+    };
+
+    // ========== BASE DE DATOS SIMULADA ==========
+    const BASE_PACIENTES = {
+      "juan.perez@gmail.com": {
+        nombre: "Juan Pérez",
+        edad: 45,
+        medicamentos: "Losartán 50mg cada 12 horas",
+        laboratorio: "Hemoglobina 14.2 g/dL, Glucosa 110 mg/dL",
+        proximaCita: "15 de agosto 2026 - 10:30 am",
+        alergias: "Ninguna",
+        codigoVerificacion: "482931",
+        diagnostico: "Hipertensión arterial controlada",
+        recomendaciones: "Dieta baja en sodio, ejercicio 3 veces por semana"
+      },
+      "maria.lopez@email.com": {
+        nombre: "María López",
+        edad: 58,
+        medicamentos: "Amlodipino 5mg cada 24 horas, Atorvastatina 20mg noche",
+        laboratorio: "Colesterol total 220 mg/dL, LDL 140, HDL 45",
+        proximaCita: "22 de agosto 2026 - 09:15 am",
+        alergias: "Penicilina",
+        codigoVerificacion: "759201",
+        diagnostico: "Hipertensión + Hipercolesterolemia",
+        recomendaciones: "Dieta mediterránea, caminata diaria 30 min"
+      },
+      "carlos.ruiz@salud.pe": {
+        nombre: "Carlos Ruiz",
+        edad: 32,
+        medicamentos: "Ibuprofeno 400mg según dolor (máx 3/día)",
+        laboratorio: "Hemograma normal, PCR bajo, Radiografía normal",
+        proximaCita: "05 de setiembre 2026 - 11:00 am",
+        alergias: "Ninguna",
+        codigoVerificacion: "104832",
+        diagnostico: "Lumbalgia mecánica",
+        recomendaciones: "Fisioterapia, evitar cargar peso, ejercicios de estiramiento"
+      }
+    };
+
+    const CREDENCIALES_DOCTOR = {
+      correo: "doctor@healthconnect.pe",
+      contrasena: "med2026",
+      nombre: "Dra. Katherine Espinoza",
+      especialidad: "Medicina Interna"
+    };
+
+    // ========== ESTADO GLOBAL ==========
+    let rolActual = 'paciente';
+    let estadoAutenticacion = {
+      pacienteConectado: false,
+      correoPaciente: null,
+      doctorConectado: false,
+    };
+    let pacienteSeleccionadoDoctor = null;
+    let menuActivoPaciente = true;
+
+    const vistaDinamica = document.getElementById('vistaDinamica');
+    const botonesRol = document.querySelectorAll('.boton-rol');
+
+    // ========== FUNCIONES PRINCIPALES ==========
+    
+    function aplicarTransicionDesvanecer() {
+      vistaDinamica.classList.add('transicion-desvanecer');
+      setTimeout(() => {
+        vistaDinamica.classList.remove('transicion-desvanecer');
+      }, 50);
+    }
+
+    function cambiarRol(nuevoRol) {
+      if (rolActual === nuevoRol) return;
+      rolActual = nuevoRol;
+      estadoAutenticacion.pacienteConectado = false;
+      estadoAutenticacion.correoPaciente = null;
+      estadoAutenticacion.doctorConectado = false;
+      pacienteSeleccionadoDoctor = null;
+      menuActivoPaciente = true;
+      
+      botonesRol.forEach(boton => {
+        const rolBoton = boton.getAttribute('data-rol');
+        boton.classList.toggle('activo', rolBoton === nuevoRol);
+      });
+      
+      aplicarTransicionDesvanecer();
+      renderizarVista();
+    }
+
+    function renderizarVista() {
+      if (rolActual === 'paciente') {
+        if (!estadoAutenticacion.pacienteConectado) {
+          renderizarLoginPaciente();
+        } else {
+          renderizarChatPaciente();
+        }
+      } else {
+        if (!estadoAutenticacion.doctorConectado) {
+          renderizarLoginDoctor();
+        } else {
+          if (pacienteSeleccionadoDoctor) {
+            renderizarChatDoctorConPaciente();
+          } else {
+            renderizarPanelDoctor();
+          }
+        }
+      }
+    }
+
+    // ========== VISTAS PACIENTE ==========
+    
+    function renderizarLoginPaciente() {
+      const html = `
+        <div class="caja-autenticacion">
+          <h3 style="color:#0b3d5f;"><i class="fas fa-sign-in-alt"></i> Acceso Paciente</h3>
+          <div class="grupo-entrada">
+            <label class="etiqueta">Correo electrónico</label>
+            <input type="email" id="entradaCorreoPaciente" class="campo-texto" placeholder="ej: juan.perez@gmail.com" value="juan.perez@gmail.com">
+          </div>
+          <div class="grupo-entrada">
+            <label class="etiqueta">Código de verificación (6 dígitos)</label>
+            <input type="text" id="entradaCodigoPaciente" class="campo-texto" placeholder="Código enviado a tu correo" maxlength="6">
+            <small style="color:#2a9d8f; cursor:pointer;" id="pistaCodigo">🔍 Ver código de demostración</small>
+          </div>
+          <button class="boton-principal" id="botonLoginPaciente"><i class="fas fa-arrow-right"></i> Ingresar al sistema</button>
+          <p style="font-size:0.8rem; color:#555;">Usuarios demo: juan.perez@gmail.com | maria.lopez@email.com | carlos.ruiz@salud.pe</p>
+        </div>
+      `;
+      vistaDinamica.innerHTML = html;
+      
+      document.getElementById('botonLoginPaciente').addEventListener('click', manejarLoginPaciente);
+      document.getElementById('pistaCodigo').addEventListener('click', () => {
+        const correo = document.getElementById('entradaCorreoPaciente').value.trim();
+        if (BASE_PACIENTES[correo]) {
+          alert(`Código de demostración para ${correo}: ${BASE_PACIENTES[correo].codigoVerificacion}`);
+        } else {
+          alert('Ingresa un correo válido de la lista');
+        }
+      });
+    }
+
+    function manejarLoginPaciente() {
+      const correo = document.getElementById('entradaCorreoPaciente').value.trim();
+      const codigo = document.getElementById('entradaCodigoPaciente').value.trim();
+      const datosPaciente = BASE_PACIENTES[correo];
+      
+      if (!datosPaciente) {
+        alert('Paciente no encontrado. Usa uno de los correos de demostración.');
+        return;
+      }
+      if (codigo !== datosPaciente.codigoVerificacion) {
+        alert('Código incorrecto. Revisa el código de demostración.');
+        return;
+      }
+      
+      estadoAutenticacion.pacienteConectado = true;
+      estadoAutenticacion.correoPaciente = correo;
+      menuActivoPaciente = true;
+      aplicarTransicionDesvanecer();
+      renderizarVista();
+    }
+
+    // Chat del paciente con integración de Chatbase
+    function renderizarChatPaciente() {
+      const correo = estadoAutenticacion.correoPaciente;
+      const datosPaciente = BASE_PACIENTES[correo];
+      if (!datosPaciente) return;
+      
+      const html = `
+        <div style="display:flex; justify-content: space-between; align-items:center;">
+          <h3 style="color:#0b3d5f;"><i class="fas fa-robot"></i> Asistente IA - ${datosPaciente.nombre}</h3>
+          <button class="boton-secundario boton-pequeno" id="botonCerrarSesionPaciente"><i class="fas fa-sign-out-alt"></i> Salir</button>
+        </div>
+        
+        <div style="background:#e8f4f8; padding:0.8rem 1rem; border-radius:1rem; margin-bottom:0.5rem;">
+          <p style="margin:0; font-size:0.9rem; color:#0b3d5f;">
+            <i class="fas fa-user-circle"></i> <strong>Paciente:</strong> ${datosPaciente.nombre} | 
+            <strong>Edad:</strong> ${datosPaciente.edad} años
+          </p>
+          <p style="margin:0.3rem 0 0 0; font-size:0.8rem; color:#555;">
+            <i class="fas fa-notes-medical"></i> Diagnóstico: ${datosPaciente.diagnostico}
+          </p>
+        </div>
+        
+        <!-- CONTENEDOR DEL CHATBOT DE CHATBASE -->
+        <div class="contenedor-chatbase" id="contenedorChatbase">
+          <iframe
+            src="${CONFIG_CHATBASE.embedUrl}${CONFIG_CHATBASE.chatbotId}"
+            title="Asistente Virtual HealthConnect"
+            allow="microphone">
+          </iframe>
+        </div>
+        
+        <div style="margin-top:0.8rem; padding:0.8rem; background:#f0f7ff; border-radius:1rem; font-size:0.8rem;">
+          <p style="margin:0; color:#0b3d5f;">
+            <i class="fas fa-info-circle"></i> 
+            <strong>Información rápida:</strong> También puedes consultar el menú de opciones rápidas.
+          </p>
+        </div>
+      `;
+      
+      vistaDinamica.innerHTML = html;
+      
+      document.getElementById('botonCerrarSesionPaciente').addEventListener('click', () => {
+        estadoAutenticacion.pacienteConectado = false;
+        estadoAutenticacion.correoPaciente = null;
+        aplicarTransicionDesvanecer();
+        renderizarVista();
+      });
+    }
+
+    // ========== VISTAS DOCTOR ==========
+    
+    function renderizarLoginDoctor() {
+      const html = `
+        <div class="caja-autenticacion">
+          <h3 style="color:#0b3d5f;"><i class="fas fa-stethoscope"></i> Acceso Profesional</h3>
+          <div class="grupo-entrada">
+            <label class="etiqueta">Correo institucional</label>
+            <input type="email" id="entradaCorreoDoctor" class="campo-texto" placeholder="doctor@healthconnect.pe" value="doctor@healthconnect.pe">
+          </div>
+          <div class="grupo-entrada">
+            <label class="etiqueta">Contraseña</label>
+            <input type="password" id="entradaContrasenaDoctor" class="campo-texto" placeholder="••••••••" value="med2026">
+          </div>
+          <button class="boton-principal" id="botonLoginDoctor"><i class="fas fa-lock-open"></i> Ingresar</button>
+        </div>
+      `;
+      vistaDinamica.innerHTML = html;
+      
+      document.getElementById('botonLoginDoctor').addEventListener('click', () => {
+        const correo = document.getElementById('entradaCorreoDoctor').value.trim();
+        const contrasena = document.getElementById('entradaContrasenaDoctor').value.trim();
+        
+        if (correo === CREDENCIALES_DOCTOR.correo && contrasena === CREDENCIALES_DOCTOR.contrasena) {
+          estadoAutenticacion.doctorConectado = true;
+          aplicarTransicionDesvanecer();
+          renderizarVista();
+        } else {
+          alert('Credenciales incorrectas');
+        }
+      });
+    }
+
+    function renderizarPanelDoctor() {
+      const pacientes = Object.entries(BASE_PACIENTES);
+      let htmlTarjetas = '';
+      
+      pacientes.forEach(([correo, datos]) => {
+        htmlTarjetas += `
+          <div class="tarjeta-paciente" data-correo="${correo}">
+            <div>
+              <strong>${datos.nombre}</strong><br>
+              <small>${datos.edad} años · ${datos.diagnostico}</small>
+            </div>
+            <i class="fas fa-chevron-right" style="color:#2a9d8f;"></i>
+          </div>
+        `;
+      });
+      
+      const html = `
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <h3 style="color:#0b3d5f;"><i class="fas fa-procedures"></i> Mis Pacientes</h3>
+          <button class="boton-secundario boton-pequeno" id="botonCerrarSesionDoctor"><i class="fas fa-sign-out-alt"></i> Salir</button>
+        </div>
+        <div class="lista-pacientes" id="contenedorListaPacientes">${htmlTarjetas}</div>
+        <p style="color:#2c3e50; margin-top:0.5rem;">
+          <i class="fas fa-user-md"></i> ${CREDENCIALES_DOCTOR.nombre} · ${CREDENCIALES_DOCTOR.especialidad}
+        </p>
+      `;
+      vistaDinamica.innerHTML = html;
+      
+      document.querySelectorAll('.tarjeta-paciente').forEach(tarjeta => {
+        tarjeta.addEventListener('click', () => {
+          pacienteSeleccionadoDoctor = tarjeta.getAttribute('data-correo');
+          aplicarTransicionDesvanecer();
+          renderizarVista();
+        });
+      });
+      
+      document.getElementById('botonCerrarSesionDoctor').addEventListener('click', () => {
+        estadoAutenticacion.doctorConectado = false;
+        pacienteSeleccionadoDoctor = null;
+        aplicarTransicionDesvanecer();
+        renderizarVista();
+      });
+    }
+
+    function renderizarChatDoctorConPaciente() {
+      const correo = pacienteSeleccionadoDoctor;
+      const datosPaciente = BASE_PACIENTES[correo];
+      if (!datosPaciente) return;
+      
+      const html = `
+        <div style="display:flex; justify-content:space-between;">
+          <button class="boton-secundario boton-pequeno" id="botonVolverPacientes"><i class="fas fa-arrow-left"></i> Volver</button>
+          <button class="boton-secundario boton-pequeno" id="botonCerrarSesionDoctorChat"><i class="fas fa-sign-out-alt"></i></button>
+        </div>
+        <div class="resumen-clinico">
+          <strong>📋 ${datosPaciente.nombre} (${datosPaciente.edad} años)</strong><br>
+          💊 ${datosPaciente.medicamentos}<br>
+          ⚠️ Alergias: ${datosPaciente.alergias}<br>
+          🧪 ${datosPaciente.laboratorio}<br>
+          📅 Cita: ${datosPaciente.proximaCita}<br>
+          📋 Dx: ${datosPaciente.diagnostico}
+        </div>
+        
+        <!-- Chat de Chatbase para el doctor -->
+        <div class="contenedor-chatbase">
+          <iframe
+            src="${CONFIG_CHATBASE.embedUrl}${CONFIG_CHATBASE.chatbotId}"
+            title="Chat con ${datosPaciente.nombre}"
+            allow="microphone">
+          </iframe>
+        </div>
+      `;
+      vistaDinamica.innerHTML = html;
+      
+      document.getElementById('botonVolverPacientes').addEventListener('click', () => {
+        pacienteSeleccionadoDoctor = null;
+        aplicarTransicionDesvanecer();
+        renderizarVista();
+      });
+      
+      document.getElementById('botonCerrarSesionDoctorChat').addEventListener('click', () => {
+        estadoAutenticacion.doctorConectado = false;
+        pacienteSeleccionadoDoctor = null;
+        aplicarTransicionDesvanecer();
+        renderizarVista();
+      });
+    }
+
+    // ========== INICIALIZACIÓN ==========
+    botonesRol.forEach(boton => {
+      boton.addEventListener('click', () => {
+        cambiarRol(boton.getAttribute('data-rol'));
+      });
+    });
+
+    renderizarVista();
+  })();
+</script>
+</body>
+</html>
